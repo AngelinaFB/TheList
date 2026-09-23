@@ -1,3 +1,559 @@
-body { font-family: system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial; }
-input { margin-right: 8px; padding:6px; }
-button { padding:6px 10px }
+/* =========================================================
+   TheList — globals.css
+   Terminal/BIOS (base) + ventanas Y2K (marco) + pixel-art (acentos)
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap');
+
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #050a08;
+  --window: #0d1512;
+  --phosphor: #5dffb8;
+  --phosphor-dim: #1f6b4d;
+  --text-muted: #86c9a9;
+  --violet: #8b6cff;
+  --violet-dark: #3b2a86;
+  --pink: #ff4fb8;
+  --paper: #c9bfff;
+  --paper-text: #1a1230;
+
+  --font-body: 'VT323', 'Courier New', monospace;
+  --font-display: 'Silkscreen', 'VT323', monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+
+  --bevel-light: rgba(255, 255, 255, 0.35);
+  --bevel-dark: rgba(0, 0, 0, 0.55);
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  image-rendering: pixelated;
+}
+
+/* ---------- Base ---------- */
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  line-height: 1.3;
+  color: var(--phosphor);
+  background-color: var(--bg);
+  /* grilla vaporwave muy tenue */
+  background-image:
+    linear-gradient(rgba(139, 108, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 108, 255, 0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-attachment: fixed;
+  text-shadow: 0 0 6px rgba(93, 255, 184, 0.35);
+}
+
+/* Scanlines CRT */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.18) 3px
+  );
+}
+
+/* Viñeta */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+::selection {
+  background: var(--pink);
+  color: var(--bg);
+  text-shadow: none;
+}
+
+/* ---------- Tipografía ---------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--phosphor);
+}
+
+h1 {
+  font-size: 1.8rem;
+  text-shadow: 2px 0 var(--pink), -2px 0 var(--violet);
+}
+
+h2 {
+  font-size: 1.3rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+p {
+  max-width: 70ch;
+}
+
+a {
+  color: var(--pink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--bg);
+  background: var(--pink);
+  text-decoration: none;
+  text-shadow: none;
+}
+
+code,
+pre {
+  font-family: var(--font-body);
+}
+
+hr {
+  border: 0;
+  border-top: 2px dashed var(--phosphor-dim);
+  margin: var(--space-3) 0;
+}
+
+/* ---------- Foco visible ---------- */
+:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 2px;
+}
+
+/* ---------- Formularios ---------- */
+input,
+textarea,
+select {
+  font: inherit;
+  color: var(--phosphor);
+  background: var(--bg);
+  border: 2px solid var(--phosphor-dim);
+  border-radius: 0;
+  padding: 6px 10px;
+  margin-right: var(--space-2);
+  caret-color: var(--pink);
+  box-shadow: inset 2px 2px 0 var(--bevel-dark);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--violet);
+  outline: none;
+  box-shadow: inset 2px 2px 0 var(--bevel-dark), 0 0 0 2px var(--violet);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  width: 100%;
+  margin-right: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--text-muted);
+}
+
+/* ---------- Botones (biselados) ---------- */
+button,
+.btn {
+  font: inherit;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--paper-text);
+  background: var(--paper);
+  border: 0;
+  border-radius: 0;
+  padding: 6px 12px;
+  cursor: pointer;
+  text-shadow: none;
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-light),
+    inset -2px -2px 0 var(--bevel-dark);
+}
+
+button:hover,
+.btn:hover {
+  background: var(--pink);
+  color: var(--bg);
+}
+
+button:active,
+.btn:active {
+  box-shadow:
+    inset -2px -2px 0 var(--bevel-light),
+    inset 2px 2px 0 var(--bevel-dark);
+  transform: translate(1px, 1px);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  background: var(--pink);
+  color: var(--bg);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--phosphor);
+  box-shadow: inset 0 0 0 2px var(--phosphor-dim);
+}
+
+.btn-ghost:hover {
+  background: var(--phosphor);
+  color: var(--bg);
+}
+
+/* ---------- Layout ---------- */
+.container {
+  width: min(1100px, 100% - 2rem);
+  margin-inline: auto;
+  padding-block: var(--space-4);
+}
+
+.stack > * + * {
+  margin-top: var(--space-3);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.row-between {
+  justify-content: space-between;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Cursor de terminal */
+.cursor::after {
+  content: '_';
+  margin-left: 2px;
+  animation: blink 1s steps(1) infinite;
+}
+
+/* ---------- Ventana Y2K ---------- */
+.window {
+  background: var(--window);
+  border: 2px solid var(--violet);
+  box-shadow: 4px 4px 0 var(--violet-dark);
+}
+
+.window-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 4px 8px;
+  background: var(--paper);
+  color: var(--paper-text);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  text-shadow: none;
+}
+
+.window-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.window-controls span {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  background: var(--paper);
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-light),
+    inset -2px -2px 0 var(--bevel-dark);
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.window-body {
+  padding: var(--space-3);
+}
+
+/* Grilla de ventanas (inicio) */
+.window-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.window-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.window-link:hover {
+  background: none;
+  color: inherit;
+}
+
+.window-link:hover .window {
+  border-color: var(--pink);
+  box-shadow: 4px 4px 0 var(--pink);
+}
+
+/* ---------- Pestañas estilo BIOS (Series | Películas) ---------- */
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: 2px solid var(--phosphor-dim);
+  margin-bottom: var(--space-3);
+}
+
+.tab {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--phosphor);
+  background: transparent;
+  padding: 8px 16px;
+  box-shadow: none;
+}
+
+.tab:hover {
+  background: var(--phosphor-dim);
+  color: var(--phosphor);
+}
+
+.tab[aria-selected='true'] {
+  background: var(--phosphor);
+  color: var(--bg);
+  text-shadow: none;
+}
+
+/* ---------- Lista de títulos (explorador de archivos) ---------- */
+.file-list > li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 8px 4px;
+  border-bottom: 1px dashed var(--phosphor-dim);
+}
+
+.file-list > li:hover {
+  background: rgba(93, 255, 184, 0.08);
+}
+
+.file-name::before {
+  content: '> ';
+  color: var(--pink);
+}
+
+/* ---------- Diálogos / toasts tipo error ---------- */
+.dialog {
+  background: var(--paper);
+  color: var(--paper-text);
+  border: 2px solid var(--violet);
+  box-shadow: 4px 4px 0 var(--violet-dark);
+  text-shadow: none;
+  max-width: 420px;
+}
+
+.dialog-title {
+  padding: 4px 8px;
+  background: var(--violet);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+}
+
+.dialog-body {
+  padding: var(--space-3);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: 0 var(--space-3) var(--space-3);
+}
+
+.dialog-error .dialog-title {
+  background: var(--pink);
+  color: var(--bg);
+}
+
+.toast-area {
+  position: fixed;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 10000;
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* ---------- Comentarios (guestbook) ---------- */
+.guestbook {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 2px solid var(--violet);
+  background: var(--bg);
+}
+
+.comment {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--violet-dark);
+}
+
+.comment-author {
+  color: var(--pink);
+}
+
+.comment-date {
+  color: var(--text-muted);
+  margin-left: var(--space-2);
+}
+
+/* ---------- Extras ---------- */
+.badge {
+  display: inline-block;
+  padding: 0 8px;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  background: var(--violet);
+  color: var(--paper);
+  text-shadow: none;
+}
+
+.badge-serie {
+  background: var(--pink);
+  color: var(--bg);
+}
+
+.badge-pelicula {
+  background: var(--phosphor);
+  color: var(--bg);
+}
+
+.counter {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #000;
+  border: 2px solid var(--phosphor-dim);
+  letter-spacing: 0.15em;
+}
+
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--violet) var(--bg);
+}
+
+/* ---------- Animación ---------- */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor::after {
+    animation: none;
+  }
+  button:active,
+  .btn:active {
+    transform: none;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  body {
+    font-size: 1.2rem;
+  }
+  h1 {
+    font-size: 1.4rem;
+  }
+  .window-grid {
+    grid-template-columns: 1fr;
+  }
+  .toast-area {
+    left: var(--space-3);
+  }
+}
